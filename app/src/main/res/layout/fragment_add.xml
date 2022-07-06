@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.fragments.AddFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/addTask"
+            style="@style/textTask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="112dp"
+            android:layout_gravity="center"
+            android:text="@string/add_task" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.Task.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="@string/editText_Hint">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edTxtAddTask"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Spinner
+            android:id="@+id/prioritySpinner"
+            style="@style/Widget.Task.TextInputLayout"
+            android:layout_width="205dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:entries="@array/task_priorities"
+            android:layout_marginTop="68dp" />
+
+        <Button
+            android:id="@+id/addButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="@string/add_button" />
+    </LinearLayout>
+
+</layout>

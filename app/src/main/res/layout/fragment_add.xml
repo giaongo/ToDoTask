@@ -30,6 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            style="@style/Widget.Task.TextInputLayout"
             android:hint="@string/editText_Hint">
             <com.google.android.material.textfield.TextInputEditText
                 android:textColor="@color/black"

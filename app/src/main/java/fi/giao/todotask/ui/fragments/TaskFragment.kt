@@ -5,11 +5,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import fi.giao.todotask.R
 import fi.giao.todotask.ToDoActivity
 import fi.giao.todotask.adapters.TasksAdapter
@@ -33,6 +38,28 @@ class TaskFragment : Fragment() {
         viewModel.getAllTasks.observe(viewLifecycleOwner, Observer { taskLists ->
             taskAdapter.differ.submitList(taskLists)
         })
+
+        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                val taskToDelete = taskAdapter.differ.currentList[position]
+                viewModel.deleteTask(taskToDelete)
+                Snackbar.make(binding.root,R.string.deleteSnackBar,Snackbar.LENGTH_LONG).apply {
+                    setAction(R.string.dismissSnackBar) {
+                        viewModel.upsertTask(taskToDelete)
+                    }
+                    show()
+                }
+            }
+        }).attachToRecyclerView(binding.taskRecyclerView)
         return binding.root
     }
 
@@ -40,7 +67,8 @@ class TaskFragment : Fragment() {
         taskAdapter = TasksAdapter()
         binding.taskRecyclerView.apply {
             adapter = taskAdapter
-            layoutManager = LinearLayoutManager(context)
+//            layoutManager = LinearLayoutManager(context)
+            layoutManager = GridLayoutManager(context,2)
         }
     }
 }

@@ -13,4 +13,6 @@
         <item>Medium Priority</item>
         <item>Low Priority</item>
     </string-array>
+    <string name="deleteSnackBar">Your task has been deleted</string>
+    <string name="dismissSnackBar">DISMISS</string>
 </resources>

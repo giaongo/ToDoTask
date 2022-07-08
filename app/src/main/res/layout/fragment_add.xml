@@ -19,15 +19,20 @@
             android:layout_gravity="center"
             android:text="@string/add_task" />
 
-
+<!--        <EditText-->
+<!--            android:id="@+id/filledTaskText"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:autofillHints="task name"-->
+<!--            android:hint="@string/add_task"-->
+<!--            android:layout_height="wrap_content"/>-->
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Task.TextInputLayout"
+            android:id="@+id/filledTaskText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:hint="@string/editText_Hint">
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edTxtAddTask"
+                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </com.google.android.material.textfield.TextInputLayout>

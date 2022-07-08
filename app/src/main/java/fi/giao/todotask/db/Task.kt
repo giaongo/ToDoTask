@@ -8,5 +8,5 @@ data class Task(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val taskName:String,
-    val priority: String,
-    val timeStamp: String)
+    val priority: Int,
+    val timeStamp: Long)

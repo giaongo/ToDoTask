@@ -6,7 +6,7 @@ import androidx.room.*
 @Dao
 interface TaskDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun upsertTask(task: Task)
+    suspend fun upsertTask(task: Task):Long
 
     @Delete
     suspend fun deleteTask(task: Task)

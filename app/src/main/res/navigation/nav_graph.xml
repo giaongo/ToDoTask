@@ -20,10 +20,20 @@
         android:id="@+id/addFragment"
         android:name="fi.giao.todotask.ui.fragments.AddFragment"
         android:label="fragment_add"
-        tools:layout="@layout/fragment_add" />
+        tools:layout="@layout/fragment_add" >
+        <action
+            android:id="@+id/action_addFragment_to_taskFragment"
+            app:destination="@id/taskFragment"
+            app:popUpTo="@id/taskFragment" />
+    </fragment>
     <fragment
         android:id="@+id/updateFragment"
         android:name="fi.giao.todotask.ui.fragments.UpdateFragment"
         android:label="fragment_update"
-        tools:layout="@layout/fragment_update" />
+        tools:layout="@layout/fragment_update" >
+        <action
+            android:id="@+id/action_updateFragment_to_taskFragment"
+            app:destination="@id/taskFragment"
+            app:popUpTo="@id/taskFragment" />
+    </fragment>
 </navigation>

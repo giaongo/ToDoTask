@@ -1,12 +1,10 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-android'
     id 'kotlin-kapt'
-    id 'kotlin-parcelize'
-    id 'androidx.navigation.safeargs.kotlin'
+    id "androidx.navigation.safeargs.kotlin"
+    id 'kotlin-android-extensions'
 }
-
 android {
     compileSdk 32
 
@@ -20,8 +18,8 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures  {
-        dataBinding true
         viewBinding true
+        dataBinding true
     }
     buildTypes {
         release {
@@ -36,38 +34,37 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    namespace 'fi.giao.todotask'
 }
 
 dependencies {
-
+    def room_version = "2.4.2"
+    def lifecycle_version = "2.0.0"
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.4.2'
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.6.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
-    // Navigation Component
-    //noinspection GradleDependency
-    implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
-    //noinspection GradleDependency
-    implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
+//    Navigation Component
+    implementation("androidx.navigation:navigation-fragment-ktx:2.4.2")
+    implementation("androidx.navigation:navigation-ui-ktx:2.4.2")
 
-    // Room components
-    //noinspection GradleDependency
-    implementation "androidx.room:room-ktx:$room_version"
-    annotationProcessor "androidx.room:room-compiler:$room_version"
-    //noinspection GradleDependency
-    androidTestImplementation "androidx.room:room-testing:$room_version"
+    // Room and Architectural Components
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.legacy:legacy-support-v4:1.0.0"
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
+    implementation "androidx.room:room-ktx:2.4.2"
+    kapt "androidx.room:room-compiler:$room_version"
+    //noinspection LifecycleAnnotationProcessorWithJava8
+    kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 
-    // Lifecycle components
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+    // Coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
 
-    // Kotlin components
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines"
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines"
 }

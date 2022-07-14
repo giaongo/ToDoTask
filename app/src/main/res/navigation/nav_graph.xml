@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/taskFragment"
         android:name="fi.giao.todotask.ui.fragments.TaskFragment"
-        android:label="TaskFragment" >
+        android:label="My Tasks" >
         <action
             android:id="@+id/action_taskFragment_to_addFragment"
             app:destination="@id/addFragment" />
@@ -19,7 +19,7 @@
     <fragment
         android:id="@+id/addFragment"
         android:name="fi.giao.todotask.ui.fragments.AddFragment"
-        android:label="fragment_add"
+        android:label="Add Task"
         tools:layout="@layout/fragment_add" >
         <action
             android:id="@+id/action_addFragment_to_taskFragment"
@@ -29,11 +29,14 @@
     <fragment
         android:id="@+id/updateFragment"
         android:name="fi.giao.todotask.ui.fragments.UpdateFragment"
-        android:label="fragment_update"
+        android:label="Update Task"
         tools:layout="@layout/fragment_update" >
         <action
             android:id="@+id/action_updateFragment_to_taskFragment"
             app:destination="@id/taskFragment"
             app:popUpTo="@id/taskFragment" />
+        <argument
+            android:name="task"
+            app:argType="fi.giao.todotask.db.Task" />
     </fragment>
 </navigation>

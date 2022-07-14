@@ -1,11 +1,13 @@
 package fi.giao.todotask.ui.fragments
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
+import android.view.*
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
@@ -35,6 +37,12 @@ class TaskFragment : Fragment() {
             view.findNavController().navigate(R.id.action_taskFragment_to_addFragment)
         }
         setUpRecyclerView()
+        taskAdapter.setOnItemClickListener { task ->
+                val bundle = Bundle().apply {
+                    putSerializable("task",task)
+                }
+                findNavController().navigate(R.id.action_taskFragment_to_updateFragment, bundle)
+        }
         viewModel.getAllTasks.observe(viewLifecycleOwner, Observer { taskLists ->
             taskAdapter.differ.submitList(taskLists)
         })
@@ -52,23 +60,77 @@ class TaskFragment : Fragment() {
                 val position = viewHolder.adapterPosition
                 val taskToDelete = taskAdapter.differ.currentList[position]
                 viewModel.deleteTask(taskToDelete)
-                Snackbar.make(binding.root,R.string.deleteSnackBar,Snackbar.LENGTH_LONG).apply {
-                    setAction(R.string.dismissSnackBar) {
+                Snackbar.make(binding.root,R.string.delete_snackBar,Snackbar.LENGTH_LONG).apply {
+                    setAction(R.string.dismiss_snackBar) {
                         viewModel.upsertTask(taskToDelete)
                     }
                     show()
                 }
             }
         }).attachToRecyclerView(binding.taskRecyclerView)
+        setHasOptionsMenu(true)
+        hideKeyboard(requireActivity())
         return binding.root
     }
 
+    private fun hideKeyboard(activity: Activity) {
+        val inputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val currentFocusedView = activity.currentFocus
+        currentFocusedView.let {
+            inputMethodManager.hideSoftInputFromWindow(
+                currentFocusedView?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS
+            )
+        }
+
+    }
     private fun setUpRecyclerView() {
         taskAdapter = TasksAdapter()
         binding.taskRecyclerView.apply {
             adapter = taskAdapter
 //            layoutManager = LinearLayoutManager(context)
             layoutManager = GridLayoutManager(context,2)
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.task_menu,menu)
+        val actionMenuItem =  menu.findItem(R.id.taskSearch)
+        val searchView = actionMenuItem.actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                searchView.clearFocus()
+                return true
+            }
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                if(query != null) {
+                    runQuery(query)
+                }
+                return true
+            }
+        })
+    }
+
+    fun runQuery(query:String) {
+        val searchQuery = "%$query%"
+        viewModel.searchTask(searchQuery).observe(viewLifecycleOwner) { tasks ->
+            if (tasks.isEmpty()) {
+                Toast.makeText(requireActivity(), "Query not found", Toast.LENGTH_SHORT).show()
+            }
+            taskAdapter.differ.submitList(tasks)
+        }
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId)  {
+            R.id.taskSearch -> {
+                Toast.makeText(requireActivity(),"Search is clicked",Toast.LENGTH_SHORT).show()
+                return true
+            }
+            else ->  {
+                return super.onOptionsItemSelected(item)
+            }
+
         }
     }
 }

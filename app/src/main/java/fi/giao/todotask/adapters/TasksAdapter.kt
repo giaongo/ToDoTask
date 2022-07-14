@@ -3,17 +3,14 @@ package fi.giao.todotask.adapters
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.card.MaterialCardView
 import fi.giao.todotask.R
 import fi.giao.todotask.databinding.TaskViewBinding
 import fi.giao.todotask.db.Task
-import kotlinx.android.synthetic.main.task_view.view.*
 import java.text.DateFormat
 
 class TasksAdapter: RecyclerView.Adapter<TasksAdapter.TaskViewHolder>() {
@@ -43,15 +40,25 @@ class TasksAdapter: RecyclerView.Adapter<TasksAdapter.TaskViewHolder>() {
             taskText.text = task.taskName
             taskPriority.text = priority
             taskTimeStamp.text = DateFormat.getInstance().format(task.timeStamp)
-        }
+            taskCard.setOnClickListener {
+                onItemClickListener?.let { it(task) }
+            }
+            }
         when(task.priority) {
             0 -> holder.binding.taskCard.setCardBackgroundColor(ContextCompat.getColor(context,R.color.dark_pink))
             1  -> holder.binding.taskCard.setCardBackgroundColor(ContextCompat.getColor(context,R.color.medium_pink))
             else -> holder.binding.taskCard.setCardBackgroundColor(ContextCompat.getColor(context,R.color.light_pink))
         }
+
     }
 
     override fun getItemCount(): Int {
         return differ.currentList.size
+    }
+
+//    This is lambda function
+    private var onItemClickListener: ((Task) -> Unit)? = null
+    fun setOnItemClickListener(listener: (Task) -> Unit) {
+        onItemClickListener  = listener
     }
 }

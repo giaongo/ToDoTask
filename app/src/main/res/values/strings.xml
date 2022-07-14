@@ -5,6 +5,7 @@
     <string name="add_task">Add Your Task</string>
     <string name="update_task">Update Your Task</string>
     <string name="editText_Hint">Type Task Here</string>
+    <string name="pickDate_text">Set Deadline</string>
     <string name="add_button">Add</string>
     <string name="update_button">Update</string>
 
@@ -13,6 +14,9 @@
         <item>Medium Priority</item>
         <item>Low Priority</item>
     </string-array>
-    <string name="deleteSnackBar">Your task has been deleted</string>
-    <string name="dismissSnackBar">DISMISS</string>
+    <string name="delete_snackBar">Your task has been deleted</string>
+    <string name="dismiss_snackBar">DISMISS</string>
+    <string name="menu_search">Search Tasks</string>
+    <string name="menu_sort">Sort tasks by High Priority</string>
+    <string name="menu_delete">Delete all tasks</string>
 </resources>

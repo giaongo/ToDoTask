@@ -2,6 +2,7 @@ package fi.giao.todotask.db
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity(tableName="tasks")
 data class Task(
@@ -9,4 +10,4 @@ data class Task(
     val id: Int,
     val taskName:String,
     val priority: Int,
-    val timeStamp: Long)
+    val timeStamp: Long)  :  Serializable

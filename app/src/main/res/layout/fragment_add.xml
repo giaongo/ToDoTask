@@ -17,41 +17,35 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="112dp"
             android:layout_gravity="center"
+            android:textColor="@color/white"
             android:text="@string/add_task" />
 
-<!--        <EditText-->
-<!--            android:id="@+id/filledTaskText"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:autofillHints="task name"-->
-<!--            android:hint="@string/add_task"-->
-<!--            android:layout_height="wrap_content"/>-->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/filledTaskText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            style="@style/Widget.Task.TextInputLayout"
+            style="@style/LoginTextInputLayoutStyle"
             android:hint="@string/editText_Hint">
             <com.google.android.material.textfield.TextInputEditText
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <Spinner
             android:id="@+id/prioritySpinner"
-            style="@style/Widget.Task.TextInputLayout"
+            android:background="@color/white"
             android:layout_width="205dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:entries="@array/task_priorities"
-            android:layout_marginTop="68dp" />
+            android:layout_marginTop="20dp" />
 
         <Button
             android:id="@+id/addButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
+            style="@style/button"
             android:text="@string/add_button" />
     </LinearLayout>
 

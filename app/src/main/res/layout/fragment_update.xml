@@ -16,34 +16,36 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="112dp"
             android:layout_gravity="center"
+            android:textColor="@color/white"
             android:text="@string/update_task" />
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Task.TextInputLayout"
+            android:id="@+id/filledUpdateText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            style="@style/LoginTextInputLayoutStyle"
             android:hint="@string/editText_Hint">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edTxtUpdateTask"
+                android:textColor="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <Spinner
-            android:id="@+id/prioritySpinner"
-            style="@style/Widget.Task.TextInputLayout"
+            android:id="@+id/priorityUpdateSpinner"
+            android:background="@color/white"
             android:layout_width="205dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:entries="@array/task_priorities"
-            android:layout_marginTop="68dp" />
+            android:layout_marginTop="20dp"  />
 
         <Button
             android:id="@+id/updateButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
+            style="@style/button"
             android:text="@string/update_button" />
     </LinearLayout>
 

@@ -8,19 +8,19 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import fi.giao.todotask.R
 import fi.giao.todotask.ToDoActivity
 import fi.giao.todotask.adapters.TasksAdapter
 import fi.giao.todotask.databinding.FragmentTaskBinding
+import fi.giao.todotask.db.Task
 import fi.giao.todotask.model.TaskViewModel
 
 class TaskFragment : Fragment() {
@@ -30,23 +30,37 @@ class TaskFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         viewModel= (activity as ToDoActivity).viewModel
         binding = FragmentTaskBinding.inflate(inflater,container,false)
         binding.addTaskBtn.setOnClickListener { view ->
             view.findNavController().navigate(R.id.action_taskFragment_to_addFragment)
         }
         setUpRecyclerView()
-        taskAdapter.setOnItemClickListener { task ->
-                val bundle = Bundle().apply {
-                    putSerializable("task",task)
-                }
-                findNavController().navigate(R.id.action_taskFragment_to_updateFragment, bundle)
-        }
         viewModel.getAllTasks.observe(viewLifecycleOwner, Observer { taskLists ->
             taskAdapter.differ.submitList(taskLists)
         })
+        taskAdapter.setOnItemClickListener { task ->
+            val bundle = Bundle().apply {
+                putSerializable("task",task)
+            }
+            findNavController().navigate(R.id.action_taskFragment_to_updateFragment, bundle)
+        }
+        swipeToDelete()
+        setHasOptionsMenu(true)
+        hideKeyboard(requireActivity())
+        return binding.root
+    }
 
+    private fun setUpRecyclerView() {
+        taskAdapter = TasksAdapter()
+        binding.taskRecyclerView.apply {
+            adapter = taskAdapter
+            layoutManager = GridLayoutManager(context,2)
+        }
+    }
+
+    private fun swipeToDelete() {
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onMove(
                 recyclerView: RecyclerView,
@@ -68,9 +82,6 @@ class TaskFragment : Fragment() {
                 }
             }
         }).attachToRecyclerView(binding.taskRecyclerView)
-        setHasOptionsMenu(true)
-        hideKeyboard(requireActivity())
-        return binding.root
     }
 
     private fun hideKeyboard(activity: Activity) {
@@ -82,14 +93,6 @@ class TaskFragment : Fragment() {
             )
         }
 
-    }
-    private fun setUpRecyclerView() {
-        taskAdapter = TasksAdapter()
-        binding.taskRecyclerView.apply {
-            adapter = taskAdapter
-//            layoutManager = LinearLayoutManager(context)
-            layoutManager = GridLayoutManager(context,2)
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -114,23 +117,50 @@ class TaskFragment : Fragment() {
 
     fun runQuery(query:String) {
         val searchQuery = "%$query%"
-        viewModel.searchTask(searchQuery).observe(viewLifecycleOwner) { tasks ->
+        viewModel.searchTask(searchQuery).observe(this, Observer {  tasks ->
             if (tasks.isEmpty()) {
                 Toast.makeText(requireActivity(), "Query not found", Toast.LENGTH_SHORT).show()
             }
             taskAdapter.differ.submitList(tasks)
-        }
+        })
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId)  {
+        return when(item.itemId)  {
             R.id.taskSearch -> {
-                Toast.makeText(requireActivity(),"Search is clicked",Toast.LENGTH_SHORT).show()
-                return true
+                true
+            }
+            R.id.actionPriority -> {
+                sortPriorityTasks()
+                true
+            }
+            R.id.actionDeleteTask -> {
+                deleteAllTasks()
+                true
             }
             else ->  {
-                return super.onOptionsItemSelected(item)
+                super.onOptionsItemSelected(item)
             }
 
         }
+    }
+
+    private fun sortPriorityTasks() {
+        viewModel.sortPriorityTask().observe(viewLifecycleOwner, Observer { tasks ->
+            taskAdapter.differ.submitList(tasks)
+        })
+    }
+
+    private fun deleteAllTasks() {
+        MaterialAlertDialogBuilder(requireActivity())
+            .setMessage(resources.getString(R.string.menu_delete_msg))
+            .setNegativeButton(resources.getString(R.string.menu_cancel_btn)) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setPositiveButton(resources.getString(R.string.menu_delete_btn)) {dialog, _ ->
+                viewModel.deleteAll()
+                dialog.dismiss()
+            }
+            .show()
     }
 }

@@ -15,4 +15,6 @@ class TaskViewModel(application: Application,private val repository: Repository)
     fun upsertTask(task: Task) = viewModelScope.launch { repository.upsertTask(task) }
     fun deleteTask(task: Task) = viewModelScope.launch { repository.deleteTask(task) }
     fun searchTask(query:String)  =  repository.searchTasks(query)
+    fun deleteAll() = viewModelScope.launch { repository.deleteAll() }
+    fun sortPriorityTask() =  repository.sortPriorityTask()
 }

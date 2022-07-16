@@ -15,6 +15,7 @@ class ToDoActivity : AppCompatActivity() {
     lateinit var viewModel: TaskViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(R.style.Theme_ToDoTask)
         setContentView(R.layout.activity_main)
         val repository = Repository(TaskDatabase.getDatabase(this).taskDao())
         val viewModelProviderFactory = TaskViewModelProviderFactory(application,repository)
